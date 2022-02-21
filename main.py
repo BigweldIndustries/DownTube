@@ -1,6 +1,3 @@
-#TODO
-#Seperate tabs for each output
-
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
