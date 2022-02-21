@@ -1,5 +1,5 @@
 <img src="title.png" width="800">
-A simple GUI wrapper for yt-dlp that allows you to easily archive youtube channels
+A simple GUI wrapper for yt-dlp that allows you to easily archive youtube channels. Completely free and open source.
 
 ## Who is this for?
 I am sure you are at least somewhat familiar with the idea of internet archivists, or people who archive content in case of a takedown or some other reason. This tool is for people who want to back up their favorite channels, but do not know how to program or use complicated command line tools
