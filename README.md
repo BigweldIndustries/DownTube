@@ -19,3 +19,10 @@ If you are not on windows, instructions are the same. You linux users all know h
 
 ## Tips
 This uses yt-dlp, so if you are archiving more than 5 channels at a time, this may cause throttling. I will fix this in a future update by queing channels 5 at a time.
+
+## Todo:
+* [x] Live logging
+* [x] Save last path
+* [x] Auto load archive.txt
+* [ ] Queing system
+* [ ] Individual tabs for each archival thread
