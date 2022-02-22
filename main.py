@@ -88,7 +88,7 @@ class Ui(QtWidgets.QMainWindow):
         self.fontDB = QtGui.QFontDatabase()
         self.fontDB.addApplicationFont("Assets/font.ttf")
         uic.loadUi('Assets/main.ui', self)
-        self.qualityBox.addItems(["1080","720"])
+        self.qualityBox.addItems(["1080","720","480","360","240","144"])
         self.get_path()
 
         # Reveal window
