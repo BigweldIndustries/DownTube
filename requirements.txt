@@ -6,4 +6,4 @@ PyQt5-Qt5==5.15.2
 PyQt5-sip==12.9.0
 QDarkStyle==3.0.3
 QtPy==2.0.0
-yt-dlp==2022.1.21
+yt-dlp==2022.1.22
