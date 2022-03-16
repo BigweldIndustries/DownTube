@@ -28,7 +28,7 @@ def backup(channel):
     global channels
     quality = str(window.qualityBox.currentText())
     window._worker.data.emit([f"Started archiving: {channel}\n", ''])
-    for path in run(f"cd {foldpath} && yt-dlp -f 'bv*[height<={quality}]+ba' {channel} -o '%(channel)s/%(title)s.%(ext)s'"):
+    for path in run(f"cd {foldpath} && yt-dlp -f 'bv*[height<={quality[:-1]}]+ba' {channel} -o '%(channel)s/%(title)s.%(ext)s'"):
         window._worker.data.emit(["", str(path)[2:][:-1]+'\n'])
     finished += 1
     window._worker.data.emit([f"Finished archiving: {channel}\n{finished}/{len(channels)} archived\n", ''])
@@ -88,7 +88,7 @@ class Ui(QtWidgets.QMainWindow):
         self.fontDB = QtGui.QFontDatabase()
         self.fontDB.addApplicationFont("Assets/font.ttf")
         uic.loadUi('Assets/main.ui', self)
-        self.qualityBox.addItems(["1080","720","480","360","240","144"])
+        self.qualityBox.addItems(["1080p","720p","480p","360p","240p","144p"])
         self.get_path()
 
         # Reveal window
