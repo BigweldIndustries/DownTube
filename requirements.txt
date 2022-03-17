@@ -1,5 +1,4 @@
 appdirs
-future
 futures
 PyQt5
 PyQt5-Qt5

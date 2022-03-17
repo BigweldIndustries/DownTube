@@ -17,6 +17,14 @@ Then:
 
 If you are not on windows, instructions are the same. You linux users all know how to open a terminal.
 
+#### Ez For Windows:
+3. Double click on the RunWindows.bat and it does all of the work for you
+
+#### EZ For Linux:
+3. Open terminal in app folder
+4. run `chmod +x RunLinux.sh` (If fails, run with sudo)
+5. Either double click on RunLinux.sh or just run it via `./RunLinux.sh`
+
 ## Tips
 This uses yt-dlp, so if you are archiving more than 5 channels at a time, this may cause throttling. I will fix this in a future update by queing channels 5 at a time.
 
