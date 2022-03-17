@@ -4,8 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import sys
 import qdarkstyle
-import os
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 import time
 import appdirs
 from subprocess import Popen, PIPE
