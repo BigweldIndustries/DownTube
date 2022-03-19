@@ -33,8 +33,11 @@ def backup(channel, currentindex):
     quality = str(window.qualityBox.currentText())
     window._worker.data.emit([f"Job {str(currentindex)} -> Started archiving: {channel}\n"])
     for path in run(f"cd {foldpath} && yt-dlp -f 'bv*[height<={quality[:-1]}]+ba' {channel} -o '%(channel)s/%(title)s.%(ext)s'"):
-        resp = str(path)[2:][:-1].replace("\r", "\n")+'\n'
-        window._worker.data.emit(["", [currentindex, resp]])
+        resp = path.decode()+"\n"
+        if resp[:5] == "ERROR":
+            window._worker.data.emit(["", "", "", resp])
+        else:
+            window._worker.data.emit(["", [currentindex, resp]])
     finished += 1
     window._worker.data.emit([f"Job {str(currentindex)} -> Finished archiving: {channel}\n{finished}/{len(channels)} archived\n"])
     
@@ -157,6 +160,7 @@ class Ui(QtWidgets.QMainWindow):
         except Exception as e:
             makeNewTab = False
             pass
+
         if makeNewTab == True:
             name = "tab"+str(tabnum)
             text = "t"+str(tabnum)
@@ -166,6 +170,16 @@ class Ui(QtWidgets.QMainWindow):
             self.transferw.jobs.addTab(tabobject, name)
             self.transferw.jobs.setTabText(tabnum, "Job "+str(tabnum))
             tabnum += 1
+
+        try:
+            data[3]
+            error = True
+        except Exception as e:
+            error = False
+            pass
+        
+        if error == True:
+            self.transferw.errorsbox.setPlainText(self.transferw.errorsbox.toPlainText()+f"Job -> {tabnum}"+data[3])
 
         # Autoscroll
         if (self.transferw.autoBox.isChecked()):
