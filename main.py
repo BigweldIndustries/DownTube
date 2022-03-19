@@ -4,11 +4,19 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import sys
 import qdarkstyle
+<<<<<<< HEAD
+import os
+=======
+>>>>>>> e7970c259704757e6ad3c564692371207a57c655
 from concurrent.futures import ThreadPoolExecutor
 import time
 import appdirs
 from subprocess import Popen, PIPE
 from pathlib import Path
+tabnum = 1
+
+def exists(var):
+     return var in globals()
 
 # Allows live logging of shell commands
 def run(command):
@@ -22,15 +30,22 @@ def run(command):
 finished = 0
 
 # Backup channel with yt-dlp
-def backup(channel):
+def backup(channel, currentindex):
     global finished
     global channels
     quality = str(window.qualityBox.currentText())
+<<<<<<< HEAD
+    window._worker.data.emit([f"Job {str(currentindex)} -> Started archiving: {channel}\n"])
+    for path in run(f"cd {foldpath} && yt-dlp -f 'bv*[height<={quality[:-1]}]+ba' {channel} -o '%(channel)s/%(title)s.%(ext)s'"):
+        resp = str(path)[2:][:-1].replace("\r", "\n")+'\n'
+        window._worker.data.emit(["", [currentindex, resp]])
+=======
     window._worker.data.emit([f"Started archiving: {channel}\n", ''])
     for path in run(f"cd {foldpath} && yt-dlp -f 'bv*[height<={quality[:-1]}]+ba' {channel} -o '%(channel)s/%(title)s.%(ext)s'"):
         window._worker.data.emit(["", str(path)[2:][:-1]+'\n'])
+>>>>>>> e7970c259704757e6ad3c564692371207a57c655
     finished += 1
-    window._worker.data.emit([f"Finished archiving: {channel}\n{finished}/{len(channels)} archived\n", ''])
+    window._worker.data.emit([f"Job {str(currentindex)} -> Finished archiving: {channel}\n{finished}/{len(channels)} archived\n"])
     
 class Archive(QtCore.QThread):
     global window
@@ -49,6 +64,7 @@ class Archive(QtCore.QThread):
     def run(self):
         global channels
         global finished
+        global foldpath
 
         # Update archive txt
         Path(foldpath).mkdir(parents = True, exist_ok = True)
@@ -59,14 +75,19 @@ class Archive(QtCore.QThread):
         
         # Archive all channels
         with ThreadPoolExecutor(max_workers=100) as executor:
-            for i in channels:
-                executor.submit(backup, i)
-        
+            for i in range(len(channels)):
+                print("Executing")
+                if i > 0:
+                    print("Making new tab "+str(i))
+                    self.data.emit(['', '', True])
+                executor.submit(backup, channels[i], i)
+    
         while finished < len(channels):
             time.sleep(1)
 
         finished = 0
-        self.data.emit(['Done', 'Done'])
+        tabnum = 1
+        self.data.emit(['Done'])
 
 class ErrorWindow(QDialog):
   def __init__(self, parent):
@@ -77,6 +98,23 @@ class ArchiveWindow(QDialog):
   def __init__(self, parent):
     super(ArchiveWindow, self).__init__(parent)
     uic.loadUi('Assets/archive.ui', self)
+
+class TabInit(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        global tabnum
+        global window
+
+        super(TabInit, self).__init__(parent)
+        name = "t"+str(tabnum)
+        lay = QtWidgets.QVBoxLayout(self)
+
+        wid = QPlainTextEdit(objectName = name)
+        wid.setReadOnly(True)
+
+        setattr(window.transferw, name, wid)
+        wid = getattr(window.transferw, name)
+
+        lay.addWidget(wid)
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -89,6 +127,7 @@ class Ui(QtWidgets.QMainWindow):
         uic.loadUi('Assets/main.ui', self)
         self.qualityBox.addItems(["1080p","720p","480p","360p","240p","144p"])
         self.get_path()
+        self.get_data()
 
         # Reveal window
         self.show()
@@ -105,14 +144,43 @@ class Ui(QtWidgets.QMainWindow):
         self.folderBox.textChanged.connect(self.get_data)
 
     def worker_data_callback(self, data):
+        global tabnum
+        
+
         # Update console 
         self.transferw.console.setPlainText(self.transferw.console.toPlainText()+data[0])
-        self.transferw.verboseConsole.setPlainText(self.transferw.verboseConsole.toPlainText()+data[1])
+        
+        try:
+            tabname = "tab"+str(data[1][0])
+            textname = "t"+str(data[1][0])
+
+            textobject = getattr(self.transferw, textname)
+
+            textobject.setPlainText(textobject.toPlainText()+data[1][1])
+            if (self.transferw.autoBox.isChecked()):
+                textobject.moveCursor(QtGui.QTextCursor.End)
+        except Exception as e:
+            pass
+            
+        try:
+            data[2]
+            makeNewTab = True
+        except Exception as e:
+            makeNewTab = False
+            pass
+        if makeNewTab == True:
+            name = "tab"+str(tabnum)
+            text = "t"+str(tabnum)
+            tabobject = TabInit()
+            setattr(self.transferw, name, tabobject)
+            tabobject = getattr(self.transferw, name)
+            self.transferw.jobs.addTab(tabobject, name)
+            self.transferw.jobs.setTabText(tabnum, "Job "+str(tabnum))
+            tabnum += 1
 
         # Autoscroll
         if (self.transferw.autoBox.isChecked()):
             self.transferw.console.moveCursor(QtGui.QTextCursor.End)
-            self.transferw.verboseConsole.moveCursor(QtGui.QTextCursor.End)
 
 
     def worker_started_callback(self):
@@ -163,6 +231,7 @@ class Ui(QtWidgets.QMainWindow):
             self.urlBox.setPlainText(text_file.read())
             text_file.close()
         except:
+            print("Error fetching archive")
             pass
 
     def get_path(self):

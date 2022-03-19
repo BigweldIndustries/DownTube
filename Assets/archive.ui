@@ -62,17 +62,31 @@
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QPlainTextEdit" name="verboseConsole">
-           <property name="readOnly">
+          <widget class="QTabWidget" name="jobs">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="movable">
             <bool>true</bool>
            </property>
-           <property name="plainText">
-            <string>Archival started.
-</string>
-           </property>
-           <property name="centerOnScroll">
-            <bool>false</bool>
-           </property>
+           <widget class="QWidget" name="tab0">
+            <attribute name="title">
+             <string>Job 0</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <widget class="QPlainTextEdit" name="t0">
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
