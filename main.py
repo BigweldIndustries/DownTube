@@ -67,9 +67,7 @@ class Archive(QtCore.QThread):
         # Archive all channels
         with ThreadPoolExecutor(max_workers=100) as executor:
             for i in range(len(channels)):
-                print("Executing")
                 if i > 0:
-                    print("Making new tab "+str(i))
                     self.data.emit(['', '', True])
                 executor.submit(backup, channels[i], i)
     
@@ -222,7 +220,6 @@ class Ui(QtWidgets.QMainWindow):
             self.urlBox.setPlainText(text_file.read())
             text_file.close()
         except:
-            print("Error fetching archive")
             pass
 
     def get_path(self):
