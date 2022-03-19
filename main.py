@@ -4,10 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import sys
 import qdarkstyle
-<<<<<<< HEAD
 import os
-=======
->>>>>>> e7970c259704757e6ad3c564692371207a57c655
 from concurrent.futures import ThreadPoolExecutor
 import time
 import appdirs
@@ -34,16 +31,10 @@ def backup(channel, currentindex):
     global finished
     global channels
     quality = str(window.qualityBox.currentText())
-<<<<<<< HEAD
     window._worker.data.emit([f"Job {str(currentindex)} -> Started archiving: {channel}\n"])
     for path in run(f"cd {foldpath} && yt-dlp -f 'bv*[height<={quality[:-1]}]+ba' {channel} -o '%(channel)s/%(title)s.%(ext)s'"):
         resp = str(path)[2:][:-1].replace("\r", "\n")+'\n'
         window._worker.data.emit(["", [currentindex, resp]])
-=======
-    window._worker.data.emit([f"Started archiving: {channel}\n", ''])
-    for path in run(f"cd {foldpath} && yt-dlp -f 'bv*[height<={quality[:-1]}]+ba' {channel} -o '%(channel)s/%(title)s.%(ext)s'"):
-        window._worker.data.emit(["", str(path)[2:][:-1]+'\n'])
->>>>>>> e7970c259704757e6ad3c564692371207a57c655
     finished += 1
     window._worker.data.emit([f"Job {str(currentindex)} -> Finished archiving: {channel}\n{finished}/{len(channels)} archived\n"])
     
