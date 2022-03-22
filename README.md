@@ -26,5 +26,5 @@ This uses yt-dlp, so if you are archiving more than 5 channels at a time, this m
 * [x] Save last path
 * [x] Auto load archive.txt
 * [ ] Queueing system
-* [ ] Errors tab
+* [X] Errors tab
 * [X] Individual tabs for each archival thread
