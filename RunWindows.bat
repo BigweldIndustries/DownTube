@@ -1,3 +1,4 @@
+@echo off
 echo "Checking Dependencies"
 py -m pip install -r requirements.txt
 echo "Running Python Application"
